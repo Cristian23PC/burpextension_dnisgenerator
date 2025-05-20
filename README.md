@@ -23,7 +23,7 @@ Una extensión para Burp Suite que permite generar **RUTs chilenos aleatorios** 
 
 ## 🖼️ Captura de Pantalla
 
-![screenshot](./extension.png)
+![screenshot](https://i.imgur.com/S5Ma5yJ.png)
 
 ---
 
