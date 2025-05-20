@@ -37,9 +37,10 @@ Una extensión para Burp Suite que permite generar **RUTs chilenos aleatorios** 
 ## ⚙️ Instalación
 
 1. Abre Burp Suite
-2. Ve a la pestaña `Extender > Extensions`
-3. Añade el archivo `.py` como una nueva extensión escrita en Python (Jython)
-4. Asegúrate de tener el Jython .jar cargado en la sección `Options > Python Environment`
+2. Ve a la pestaña `Extensions`
+3. Dar al botón "add"
+4. Añade el archivo `.py` como una nueva extensión escrita en Python (Jython)
+5. Asegúrate de tener el Jython .jar cargado en la sección `Options > Python Environment`
 
 ---
 
