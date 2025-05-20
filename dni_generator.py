@@ -4,8 +4,7 @@ from javax.swing import (
     JPanel, JLabel, JTextField, JButton, JScrollPane,
     JTextArea, BoxLayout, JCheckBox, BorderFactory
 )
-from java.awt import Color, Dimension, Font
-from java.awt import Toolkit
+from java.awt import Color, Dimension, Font, Toolkit
 from java.awt.datatransfer import StringSelection
 import random
 
@@ -14,54 +13,62 @@ class BurpExtender(IBurpExtender, ITab):
     def registerExtenderCallbacks(self, callbacks):
         self._callbacks = callbacks
         self._helpers = callbacks.getHelpers()
-        callbacks.setExtensionName("Generador de RUTs")
+        callbacks.setExtensionName("RUT/DNI Generator")
 
-        # Panel principal
         self._panel = JPanel()
         self._panel.setLayout(BoxLayout(self._panel, BoxLayout.Y_AXIS))
         self._panel.setBackground(Color(245, 245, 250))  # Fondo suave
 
-        # Fuente común
-        fuente = Font("Arial", Font.PLAIN, 12)
+        # Fuente atractiva y grande
+        fuente_general = Font("Segoe UI", Font.PLAIN, 14)
+        fuente_textarea = Font("Courier New", Font.PLAIN, 13)
 
         label = JLabel("Cantidad de RUTs a generar:")
-        label.setFont(fuente)
+        label.setFont(fuente_general)
         self._panel.add(label)
 
         self.inputField = JTextField(5)
-        self.inputField.setMaximumSize(Dimension(100, 25))
-        self.inputField.setFont(fuente)
+        self.inputField.setMaximumSize(Dimension(100, 30))
+        self.inputField.setFont(fuente_general)
         self._panel.add(self.inputField)
 
-        # Espacio visual
         self._panel.add(JLabel(" "))
 
         self.cleanCheckBox = JCheckBox("Sin puntos ni guion")
-        self.cleanCheckBox.setFont(fuente)
+        self.cleanCheckBox.setFont(fuente_general)
         self.cleanCheckBox.setBackground(Color(245, 245, 250))
         self._panel.add(self.cleanCheckBox)
 
         self.noDvCheckBox = JCheckBox("Sin dígito verificador")
-        self.noDvCheckBox.setFont(fuente)
+        self.noDvCheckBox.setFont(fuente_general)
         self.noDvCheckBox.setBackground(Color(245, 245, 250))
         self._panel.add(self.noDvCheckBox)
+
+        self.onlyDashCheckBox = JCheckBox("Solo guion (sin puntos)")
+        self.onlyDashCheckBox.setFont(fuente_general)
+        self.onlyDashCheckBox.setBackground(Color(245, 245, 250))
+        self._panel.add(self.onlyDashCheckBox)
 
         self._panel.add(JLabel(" "))
 
         self.generateButton = JButton("Generar RUTs", actionPerformed=self.generar_ruts)
-        self.generateButton.setFont(fuente)
+        self.generateButton.setFont(fuente_general)
         self.generateButton.setBackground(Color(220, 235, 255))
         self._panel.add(self.generateButton)
 
         self.copyButton = JButton("Copiar al portapapeles", actionPerformed=self.copiar_resultados)
-        self.copyButton.setFont(fuente)
+        self.copyButton.setFont(fuente_general)
         self.copyButton.setBackground(Color(210, 245, 210))
         self._panel.add(self.copyButton)
 
         self._panel.add(JLabel(" "))
 
+        label_resultados = JLabel("Resultados:")
+        label_resultados.setFont(fuente_general)
+        self._panel.add(label_resultados)
+        
         self.resultArea = JTextArea(15, 40)
-        self.resultArea.setFont(Font("Courier New", Font.PLAIN, 12))
+        self.resultArea.setFont(fuente_textarea)
         self.resultArea.setEditable(False)
         self.resultArea.setBackground(Color(255, 255, 245))
         self.resultArea.setBorder(BorderFactory.createLineBorder(Color.GRAY))
@@ -79,8 +86,9 @@ class BurpExtender(IBurpExtender, ITab):
     def generar_ruts(self, event):
         try:
             cantidad = int(self.inputField.getText())
-            limpio = self.cleanCheckBox.isSelected()
+            sin_puntos_guion = self.cleanCheckBox.isSelected()
             sin_dv = self.noDvCheckBox.isSelected()
+            solo_guion = self.onlyDashCheckBox.isSelected()
             resultados = []
 
             for _ in range(cantidad):
@@ -88,10 +96,13 @@ class BurpExtender(IBurpExtender, ITab):
                 dv = self.calcular_dv(rut)
                 rut_formateado = self.formatear_rut(rut, dv)
 
-                if limpio:
+                if sin_puntos_guion:
                     rut_formateado = rut_formateado.replace(".", "").replace("-", "")
+                elif solo_guion:
+                    rut_formateado = rut_formateado.replace(".", "")  # deja el guion
+
                 if sin_dv:
-                    rut_formateado = rut_formateado[:-1]  # elimina último carácter (DV)
+                    rut_formateado = rut_formateado.rsplit("-", 1)[0]  # elimina DV
 
                 resultados.append(rut_formateado)
 
