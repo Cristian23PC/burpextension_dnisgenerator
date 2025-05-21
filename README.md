@@ -60,12 +60,6 @@ El Rol Único Tributario (RUT) es un identificador único usado en Chile, simila
 
 ---
 
-## 📄 Licencia
-
-MIT License
-
----
-
 ## ✍️ Autor
 
 **by 1_4tom0**  
