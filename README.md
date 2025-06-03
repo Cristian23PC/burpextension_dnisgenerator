@@ -69,6 +69,4 @@ El Rol Único Tributario (RUT) es un identificador único usado en Chile, simila
 
 Esta herramienta fue desarrollada únicamente con fines educativos y éticos.  
 **No me hago responsable por el mal uso que se le pueda dar.**  
-El objetivo es promover el aprendizaje en ciberseguridad, pruebas de penetración y desarrollo seguro.  
-El uso indebido de esta herramienta puede violar leyes locales, nacionales o internacionales.  
 **Úsala siempre con consentimiento y en entornos controlados.**
